@@ -1,13 +1,13 @@
 puts 'Enter side A'
-side_a = gets.chomp
+side_a = Integer(gets.chomp)
 
 puts 'Enter side B'
-side_b = gets.chomp
+side_b = Integer(gets.chomp)
 
 puts 'Enter side C'
-side_c = gets.chomp
+side_c = Integer(gets.chomp)
 
-if side_a.to_i**2 == side_b.to_i**2 + side_c.to_i**2 or side_b.to_i**2 == side_a.to_i**2 + side_c.to_i**2 or side_c.to_i**2 == side_a.to_i**2 + side_b.to_i**2
+if side_a ** 2 == side_b ** 2 + side_c ** 2 || side_b ** 2 == side_a ** 2 + side_c ** 2 || side_c ** 2 == side_a ** 2 + side_b ** 2
 	puts'Треугольник прямоугольный'
 end
 
