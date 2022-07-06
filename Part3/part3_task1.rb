@@ -11,6 +11,8 @@ year = {january: 31,
   november: 30,
   december: 31}
 
-mon = year.select { |months, days| days == 30} 
-mon.each_key { |month| puts month}
+mon = year.select { |months, days|
+  if days == 30
+    puts month
+end} 
   
