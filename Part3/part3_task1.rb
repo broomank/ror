@@ -14,5 +14,6 @@ year = {january: 31,
 mon = year.select { |months, days|
   if days == 30
     puts month
-end} 
+end
+} 
   
