@@ -13,37 +13,46 @@ attr_reader :vag_num, :type
   end
 
   def add_vag 
-    if speed == 0
+    if speed.zero?
       @vag_num += 1
     end
   end
 
   def remove_vag
-    if speed == 0
+    if speed.zero?
       @vag_num -= 1
     end
   end
 
   def get_route(route)
     @route = route
-    @position = route.stations[0]
+    @position = route.stations.first
   end
 
   def move_straight
-    @position = @route.stations[@route.stations.index(@position) + 1]
+    if @position != @route.stations.last
+      @position = self.next_station
+    end
   end
 
   def move_back
-    @position = @route.stations[@route.stations.index(@position) - 1]
+    if @position != @route.stations.first
+      @position = self.previous_station
+    end  
   end
 
-  def closes_stations
+  def previous_station
     @previous_station = @route.stations[@route.stations.index(@position) - 1]
-    @current = @position
-        @next_station = @route.stations[@route.stations.index(@position) + 1]
-    puts @previous_station, @current, @next_station
+    @previous_station
+  end
+
+  def current_station
+    @current_station = @position
+    @current_station
+  end
+
+  def next_station
+    @next_station = @route.stations[@route.stations.index(@position) + 1]
+    @next_station
   end
 end
-
-
-
