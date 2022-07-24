@@ -15,16 +15,12 @@ attr_reader :vag_num, :type
   def add_vag 
     if speed == 0
       @vag_num += 1
-    else 
-      puts 'Stop the train'
     end
   end
 
   def remove_vag
     if speed == 0
       @vag_num -= 1
-    else
-      puts 'Stop the train'
     end
   end
 
