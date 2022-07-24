@@ -29,13 +29,12 @@ attr_reader :vag_num, :type
     @position = route.stations[0]
   end
 
-  def change_station(direction)
-    @direction = direction
-    if direction == "straight"
-      @position = @route.stations[@route.stations.index(@position) + 1]
-    elsif direction == "back"
-      @position = @route.stations[@route.stations.index(@position) - 1]
-    end
+  def move_straight
+    @position = @route.stations[@route.stations.index(@position) + 1]
+  end
+
+  def move_back
+    @position = @route.stations[@route.stations.index(@position) - 1]
   end
 
   def closes_stations
