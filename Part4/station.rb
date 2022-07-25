@@ -10,10 +10,8 @@ class Station
     @trains << train_name
   end
   
-  def trains_by_type
-    hash = Hash.new(0)
-    @trains.each { |train| hash[train.type] += 1 }
-    hash
+  def trains_by(type)
+    @trains.select{|train| train.type == type} 
   end
 
   def send_train(train_name)
