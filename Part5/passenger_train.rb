@@ -7,4 +7,13 @@ class PassengerTrain < Train
     super(number)
     @type = 'passenger'
   end
+
+  def add_wagon(wagon)
+    if wagon.type == type
+      super
+      puts 'wagon added'
+    else
+      puts 'wrong wagon type'
+    end
+  end
 end
