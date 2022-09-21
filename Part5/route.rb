@@ -1,17 +1,20 @@
 class Route
 
-  attr_accessor :stations
+  attr_accessor :stations, :route_name
 
-  def initialize(first_station, last_station)
+  def initialize(route_name, first_station, last_station)
+    @route_name = route_name
+    @first_station = first_station
+    @last_station = last_station
     @stations = [first_station, last_station]
   end
 
-  def add_middle_station(middle_name)
-    @stations.insert(-2, middle_name)
+  def add_middle_station(name)
+    @stations.insert(-2, name)
   end
 
-  def delete_middle_station(middle_name)
-    @stations.delete(middle_name)
+  def delete_middle_station(name)
+    @stations.delete(name)
   end
 
   def show_stations
