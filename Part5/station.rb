@@ -6,16 +6,20 @@ class Station
     @trains = []
   end
 
-  def add_train(number)
-    @trains << number
+  def add_train(train)
+    @trains << train
   end
   
   def trains_by(type)
     @trains.select{|train| train.type == type} 
   end
 
-  def send_train(number)
-    @trains.delete(number)
+  def send_train(train)
+    @trains.delete(train)
+  end
+
+  def show_trains
+    @trains.each { |train| puts "Train number #{train.number}" }
   end
 end
 

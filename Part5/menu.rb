@@ -54,11 +54,12 @@ class Menu
     end
   end
 
-  def create_station
+  def create_station 
     puts 'enter station name'
     name = gets.chomp
-    @stations << Station.new(name)
-    puts "station #{name} created"
+    station = Station.new(name)
+    @stations << station
+    puts "station #{station.name} created"
     stations_list
   end
 
@@ -75,72 +76,82 @@ class Menu
   end
 
   def create_route
-    puts 'enter route name'
-    route_name = gets.chomp
     puts 'enter first station'
-    first_station = gets.chomp
+    first_station_name = gets.chomp
     puts 'enter last station'
-    last_station = gets.chomp
-    @routes << Route.new(route_name, first_station, last_station)
-    @stations << Station.new(first_station)
-    @stations << Station.new(last_station)
+    last_station_name = gets.chomp
+    first_station = find_station(first_station_name)
+    last_station = find_station(last_station_name)
+    return puts 'can\'t find station' if first_station.nil? || last_station.nil?
+    route = Route.new(first_station, last_station)
+    @routes << route
+    puts "Route #{route.name} created"
   end
 
   def add_station
-    @routes.each { |route| puts "#{route.route_name}" }
-    puts 'enter route'
-    route = gets.chomp
+    routes_list
+    puts 'enter route name'
+    route_name = gets.chomp
     puts 'enter station name'
-    name = gets.chomp
-    route_upd = @routes.find { |r| r.route_name == route}
-    route_upd.add_middle_station(name)
-    puts "Station #{name} added"
-    puts "#{route_upd.stations}"
+    station_name = gets.chomp
+    station = find_station(station_name)
+    return no_station if station.nil?
+    route = find_route(route_name)
+    return no_route if route.nil?
+    route.add_middle_station(station)
+    puts "Station #{station.name} added"
+    puts "Stations on the route: #{route.stations.each { |station| puts "#{station.name}" }}"
   end
 
+
   def remove_station
-    @routes.each { |route| puts "#{route.route_name}" }
-    puts 'enter route'
-    route = gets.chomp
+    routes_list
+    puts 'enter route name'
+    route_name = gets.chomp
     puts 'enter station name'
-    name = gets.chomp
-    route_upd = @routes.find { |r| r.route_name == route}
-    route_upd.delete_middle_station(name)
-    puts "Station #{name} removed"
+    station_name = gets.chomp
+    station = find_station(station_name)
+    return no_station if station.nil?
+    route = find_route(route_name)
+    return no_route if route.nil?   
+    route.delete_middle_station(station)
+    puts "Station #{station.name} removed"
+    puts "Stations on the route: #{route.stations.each { |station| puts "#{station.name}" }}"
   end
 
   def set_route
-    @trains.each { |t| puts "#{t.number}" }
-    @routes.each { |r| puts "#{r.route_name}" }
+    trains_list
+    routes_list
     puts 'enter train number'
     number = gets.chomp.to_i
     puts 'enter route name'
-    name = gets.chomp
-    train = @trains.find { |t| t.number == number}
-    route = @routes.find { |r| r.route_name == name}
-    train.get_route(route)
-    puts "Train #{train.number} set to #{route.route_name} route"
-  end
-
-  
+    route_name = gets.chomp
+    train = find_train(number)
+    return no_train if train.nil? 
+    route = find_route(route_name)
+    return no_route if route.nil? 
+    train.set_route(route)
+    puts "Train #{train.number} set to #{route.name} route"
+  end  
 
   def add_wag 
     puts 'enter train number'
     number = gets.chomp.to_i
-    train = @trains.find { |t| t.number == number}     
+    train = find_train(number)
+    return no_train if train.nil? 
     if train.type == 'cargo'
       train.add_wag(CargoWagon.new)
     elsif train.type == 'passenger'
       train.add_wag(PassengerWagon.new)
     end
     puts 'wagon added'
-    puts "#{train.wagons}" 
   end
 
   def remove_wag
     puts 'enter train number'
     number = gets.chomp.to_i
-    train = @trains.find { |train| train.number == number}
+    train = find_train(number)
+    return no_train if train.nil? 
     if train.type == 'cargo'
       train.remove_wag(train.wagons.find {|w| w.type == 'cargo'})
     elsif train.type == 'passenger'
@@ -152,15 +163,19 @@ class Menu
   def move_train_forward
     puts 'enter train number'
     number = gets.chomp.to_i
-    train = @trains.find { |train| train.number == number}
-    train.move_straight
+    train = find_train(number)
+    return no_train if train.nil? 
+    return puts 'set a route first' if train.route.nil?
+    train.move_forward
     puts "current_station is #{train.current_station}"
   end
 
   def move_train_back
     puts 'enter train number'
     number = gets.chomp.to_i
-    train = @trains.find { |train| train.number == number}
+    train = find_train(number)
+    return no_train if train.nil?
+    return puts 'set a route first' if train.route.nil?
     train.move_back
     puts "current_station is #{train.current_station}"
   end
@@ -169,15 +184,45 @@ class Menu
     @stations.each { |station| puts "#{station.name}" }
   end
 
-  def routes_list
-    @routes.each { |route| puts "#{route.route_name}" }
-  end
-
   def trains_on_station_list
     puts 'enter station name'
-    name = gets.chomp    
-    train_on_st = @trains.select { |train| train.position == name}
-    train_on_st.each {|train| puts "Train number - #{train.number}" } 
+    station_name = gets.chomp
+    station = find_station(station_name)  
+    puts "#{station.show_trains}"
+  end
+
+private
+
+  def routes_list
+    @routes.each { |route| puts "#{route.name}" }
+  end
+
+  def trains_list
+    @trains.each { |train| puts "#{train.number}" }
+  end
+
+  def find_station(station_name)
+    @stations.find { |station| station.name == station_name}
+  end
+
+  def find_route(route_name)
+    @routes.find { |route| route.name == route_name}
+  end
+
+  def no_station
+    puts 'there is no such station'
+  end
+
+  def no_route
+    puts 'there is no such route'
+  end
+
+  def find_train(number)
+    @trains.find { |train| train.number == number}
+  end
+
+  def no_train
+    puts 'there is no such train'
   end
 end
 
