@@ -53,6 +53,8 @@ class Menu
       abort
     end
   end
+  
+  private
 
   def create_station 
     puts 'enter station name'
@@ -190,8 +192,6 @@ class Menu
     station = find_station(station_name)  
     puts "#{station.show_trains}"
   end
-
-private
 
   def routes_list
     @routes.each { |route| puts "#{route.name}" }
