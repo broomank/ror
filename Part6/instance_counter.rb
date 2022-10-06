@@ -1,24 +1,24 @@
 module InstanceCounter
-	def self.included(base)
-		base.extend ClassMethods
-		base.include InstanceMethods
-	end
+  def self.included(base)
+    base.extend ClassMethods
+    base.include InstanceMethods
+  end
 
-	module ClassMethods
-		attr_writer :instances
+  module ClassMethods
+    attr_writer :instances
 
-   	def instances
-    	@instances ||= 0 # is a conditional assignment operator
+    def instances
+      @instances ||= 0 # is a conditional assignment operator
     end
   end
 
   module InstanceMethods
+	  
+    private
 
-  	private
-
-  	def register_instance
-  		self.class.instances += 1
-  	end
+    def register_instance
+      self.class.instances += 1
+    end
   end
 end
 
