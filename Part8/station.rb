@@ -41,12 +41,6 @@ class Station
     @trains.each { |train| yield(train) }
   end
 
-  def trains_list
-    @trains.each { |train| puts "Train number: #{train.number}, train type: #{train.type}, wagons count: #{train.wagon_count} " }
-  end
-
-
-
   protected
   
   def validate!

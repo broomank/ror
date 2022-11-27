@@ -79,10 +79,6 @@ class Train
     @wagons.each { |wagon| yield(wagon) }
   end
 
-  def wagon_list
-    @wagons.each { |wagon| puts "#{wagon.description}" } 
-  end
-
   def wagon_count
     @wagons.length
   end

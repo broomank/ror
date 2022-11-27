@@ -185,7 +185,7 @@ end
 
   def move_train_forward
     puts 'enter train number'
-    number = gets.chomp.to_i
+    number = gets.chomp
     train = find_train(number)
     return no_train if train.nil? 
     return puts 'set a route first' if train.route.nil?
@@ -211,7 +211,7 @@ end
     puts 'enter station name'
     station_name = gets.chomp
     station = find_station(station_name)
-    puts "#{station.trains_list}"  
+    station.train_to_block { |train| puts "Train number: #{train.number}, train type: #{train.type}, wagons count: #{train.wagon_count} " } 
   end
 
   def routes_list
@@ -224,7 +224,7 @@ end
     train = find_train(number)
     return no_train if train.nil?
     return no_wagons if train.wagons.empty?
-    train.wagon_list
+    train.wagon_to_block { |wagon| puts "#{wagon.description}" }
   end
 
   def take_seat_or_capacity
